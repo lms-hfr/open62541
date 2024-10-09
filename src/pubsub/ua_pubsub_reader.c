@@ -939,6 +939,15 @@ UA_DataSetReader_process(UA_Server *server, UA_ReaderGroup *rg,
             continue;
         }
 
+        // Call DataChange callback if defined
+        if(tv->onDataChange_callback) {
+            UA_SubscribedDataChange data = {
+                .nodeId = tv->targetVariable.targetNodeId,
+                .value = msg->data.keyFrameData.dataSetFields[i].value};
+            (*tv->onDataChange_callback)(&data);
+            continue;
+        }
+
         /* Write via the Write-Service */
         UA_WriteValue writeVal;
         UA_WriteValue_init(&writeVal);

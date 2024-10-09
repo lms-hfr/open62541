@@ -645,6 +645,14 @@ typedef enum {
     UA_PUBSUB_SDS_MIRROR
 } UA_SubscribedDataSetEnumType;
 
+/* Callback for target field value changes*/
+typedef struct {
+    UA_NodeId nodeId;
+    UA_Variant value;
+} UA_SubscribedDataChange;
+typedef void OnDataChange(UA_SubscribedDataChange* data);
+
+
 typedef struct {
     /* Standard-defined FieldTargetDataType */
     UA_FieldTargetDataType targetVariable;
@@ -669,6 +677,9 @@ typedef struct {
                        const UA_NodeId *targetVariableIdentifier,
                        void *targetVariableContext,
                        UA_DataValue **externalDataValue);
+
+    /* callback for value changes*/
+    OnDataChange* onDataChange_callback;
 } UA_FieldTargetVariable;
 
 typedef struct {
